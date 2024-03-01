@@ -9,10 +9,10 @@ import * as debugBuilder from 'debug';
 import { ReadStream } from 'fs';
 import * as url from 'url';
 import { v4 as uuidv4 } from 'uuid';
-import MIMEType = require('whatwg-mimetype');
 import { gzipSync } from 'zlib';
 import { IExOptions, IHeaders, IHttpClient, IOptions } from './types';
 import { parseMTOMResp } from './utils';
+import MIMEType = require('whatwg-mimetype');
 
 const debug = debugBuilder('node-soap');
 const VERSION = require('../package.json').version;
@@ -39,7 +39,7 @@ export class HttpClient implements IHttpClient {
   constructor(options?: IOptions) {
     options = options || {};
     this.options = options;
-    this._request = options.request || req.default.create();
+    this._request = options.request || req.create();
   }
 
   /**
@@ -194,7 +194,7 @@ export class HttpClient implements IHttpClient {
         workstation: exoptions.workstation || '',
         domain: exoptions.domain || '',
       });
-      req = ntlmReq(options);
+      req = ntlmReq(options) as req.AxiosPromise;
     } else {
       if (this.options.parseReponseAttachments) {
         options.responseType = 'arraybuffer';
